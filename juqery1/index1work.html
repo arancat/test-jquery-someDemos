@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2.1细说jQuery应用，搞定百度登录组件(作业：选项卡功能)</title>
+    <style>
+        .wrapper {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+        .wrapper .btn {
+            text-align: center;
+        }
+        button {
+            width: 50px;
+            height: 50px;
+        }
+        button.active {
+            /* 特别注意元素后面跟样式必须紧跟，不能有空格隔开 */
+            background: green;
+        }
+        /* .active {
+            background-color: green;
+        } */
+        .wrapper .content div{
+            width: 300px;
+            height: 250px;
+            background: #ff1493;
+            text-align: center;
+            /* 文字水平居中 */
+            line-height: 250px;
+            /* 文字垂直居中 */
+            display: none;
+        }
+        .wrapper .content div.c-active {
+            display: block; 
+        } 
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="btn">
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+        </div>
+        <div class="content">
+            <div class="c-active">1111</div>
+            <div>2222</div>
+            <div>3333</div>
+        </div>
+    </div>
+    <script src="./jquery/jquery.js"></script>
+    <script>
+        $('button').click(function () {
+            $('.active').removeClass('active');
+            $(this).addClass('active');
+            $('.c-active').removeClass('c-active');
+            var index = $(this).index();
+            $('.content div').eq(index).addClass('c-active');
+        })
+    
+    
+    
+    
+    </script>
+
+
+
+</body>
+</html> 

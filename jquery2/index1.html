@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1.jQuery源码分析，封装自己的jQuery</title>
+</head>
+<body>
+    <div id="#demo">123</div>
+
+    <script>
+
+//以father为构造函数构造的对象（例子
+    // function Father() {
+    //          this.age = 18;
+    //          return this;
+    //     }
+    //     console.log(new Father());
+    
+//如何封闭作用域：
+        // 1.命名空间
+        // 2.立即执行函数
+//构造jQuery对象↓
+        // (function() {
+            //暴露给window下
+            // window.jQuery = window.$ = jQuery;
+        //          // function jQuery(selector) {
+        //         //     return new jQuery.prototype.init(selector);
+        //         // }
+        //         // jQuery.prototype =  {
+        //         //     init: function (selector) {
+        //         //         var dom = document.getElementById(selector);
+        //         //         this[0] = dom;
+        //         //         this.length = 1;
+        //         //         return this;
+        //         //     },
+        //         //     css: function () {
+        //         //         console.log('css');
+
+        //         //         return this;
+        //         //     },
+        //         //     html: function () {
+        //         //         console.log('html');
+        //                 //return this;
+        //         //     }
+        //         // }
+
+        //         // jQuery.prototype.init.prototype = jQuery.prototype;
+        // })()
+        //         // //Html前面也应该返回一个对象
+        //         // jQuery('demo').css().html();
+
+
+
+
+
+    //*************自己封装jQuery
+
+
+    //传入类别：
+    //1 $(false/null/undefined)
+    //2 $('<li></li>')  $('<li/>s5555') $('<li>', {html: 123, dg:'ds'});
+    //3 $('#id') $('.class') $('div') $('div') $('ul li') $('li', 'ul'); 
+        //$('li:eq(0)') $('li:even/add')
+    //4  $(this)----$(dom)
+    //5 $(function () {})
+    //6 $($())
+
+
+    //最后分为4种（解析见最后源码↓）
+
+    // merge()方法——合并数组或类数组的
+    var obj1 = {0: 'div', 1: 'a', length: 2};
+    var arr = [1, 2, 3];
+    var obj = jQuery.merge(obj1 , arr);
+    //有索引值的都能够合并 将arr合并到obj1里面了
+    console.log(obj);
+
+    // jQuery.parseHTML()方法
+    jQuery.parseHTML('<li></li>', document, false);
+    //输出为↓consolo.log(↓)
+    (2)[li, script]
+
+
+    //$(sekector)
+
+    // 2. $('<li></li>')    $('<li><span>span</span></li>')
+
+    //$('<li/>s67899')   $('<li>', ({html: 123}));  $('#id')
+            match = [null, '<li></li>', null];
+            match = ['#demo', undefined, 'demo'];
+            match = ['            <li>sf78', '<li>', undefined];
+
+    
+
+   //3 $('.class') $('div') $('div') $('ul li') $('li', 'ul/dom/$()'); 
+        //$('li:eq(0)') $('li:even/add')
+            match = null; 
+
+
+
+
+
+
+
+    //1命名空间
+    //2立即执行函数
+//立即执行函数不在window下，需要把它暴露在window下↓
+    (function (global, factory) {
+
+         factory(window);
+
+    })(this, function (window) {
+
+        window.jQuery = window.$ = jQuery;
+        function jQuery(selector) {
+            return new jQuery.prototype.init(selector);
+
+        }
+
+        jQuery.prototype = {
+            init: function (selector)  {
+                var dom = document.getElementById(selector);
+                this[0] = dom;
+                this.length = 1;
+                 return this;
+            },
+            css: function () {
+                console.log('css');
+                return this;
+            },
+            html: function () {
+                console.log('html');
+                return this;
+            }
+        }
+        jQuery.prototype.init.prototype = jQuery.prototype;
+        // console.log(jQuery('#demo').css());//is not a function?-->改变指向
+
+
+
+    })
+        jQuery('#demo').css().html();
+        //相同
+        $('#demo').css().html();
+    
+
+    // window.onload和ready的区别——$(function ( ) {})这个函数都是通过ready来写的
+    // setTimeout(function () {
+    //     $().ready(function () {//而ready是用setTimeout写的，会延迟一点点
+
+    //     })
+    // }, 0)
+    //dom文档加载完成 ready() 虽然资源少的时候可能window.onload会更快，但是资源多了ready会更快
+    //↑↓时间差
+    //window.onload  (资源加载很多的话script加载，window.onload会慢很多)
+
+
+    //init类型的解析
+     jQuery.prototype.init = function (dom) {
+         //*********dom
+         this[0] = dom;
+         this.length = 1;
+         return this;
+     }
+ 
+     $(function () {
+         //function
+         $()
+     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     //init类型源码
+     init = jQuery.fn.init = function( selector, context, root ) {
+		var match, elem;
+		//root 默认为  = document
+		// HANDLE: $(""), $(null), $(undefined), $(false)
+		if ( !selector ) {
+			return this;
+		}
+
+		// Method init() accepts an alternate rootjQuery
+		// so migrate can support jQuery.sub (gh-2101) $(document)
+		root = root || rootjQuery;
+
+		// Handle HTML strings
+		if ( typeof selector === "string" ) {
+			if ( selector[ 0 ] === "<" &&
+				selector[ selector.length - 1 ] === ">" &&
+				selector.length >= 3 ) {
+
+				// Assume that strings that start and end with <> are HTML and skip the regex check
+				match = [ null, selector, null ];
+
+			} else {
+				// /^(?:       \s*(<[\w\W]+>)[^>]*       |             #([\w-]+))$/
+				// '<div>demo'                           |         #demo
+				//['<div>demo', '<div>', undefined]           |         ['<div>demo',undefined, demo]
+			
+
+	    		
+				
+				match = rquickExpr.exec( selector );
+
+		
+			}
+			
+
+			// Match html or make sure no context is specified for #id
+			if ( match && ( match[ 1 ] || !context ) ) {
+
+				// HANDLE: $(html) -> $(array)
+				if ( match[ 1 ] ) {
+					context = context instanceof jQuery ? context[ 0 ] : context;
+
+					// Option to run scripts is true for back-compat
+					// Intentionally let the error be thrown if parseHTML is not present
+					// jQuery.merge({length:0},[1,2,3]) 把后一个参数合并到第一个参数中
+					// jQuery.parseHTML('<div>dd</div><script></script>',document,true) 字符串的html变成数组
+										
+					jQuery.merge( this, jQuery.parseHTML(
+						match[ 1 ],
+						context && context.nodeType ? context.ownerDocument || context : document,
+						true
+					) );
+
+					// HANDLE: $(html, props)
+					// jQuery.isPlainObject是否为对象字面量
+					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
+						for ( match in context ) {
+
+							// Properties of context are called as methods if possible
+							if ( jQuery.isFunction( this[ match ] ) ) {
+								this[ match ]( context[ match ] );
+
+							// ...and otherwise set as attributes
+							} else {
+								this.attr( match, context[ match ] );
+							}
+						}
+					}
+
+					return this;
+
+				// HANDLE: $(#id)
+				} else {
+					elem = document.getElementById( match[ 2 ] );
+
+					if ( elem ) {
+
+						// Inject the element directly into the jQuery object
+						this[ 0 ] = elem;
+						this.length = 1;
+					}
+					return this;
+				}
+
+			// HANDLE: $(expr, $(...))
+			// 是否传了context,没传的话用document,传了的话判断是不是jQ对象
+			} else if ( !context || context.jquery ) {
+				return ( context || root ).find( selector );//sizzle
+
+			// HANDLE: $(expr, context)
+			// (which is just equivalent to: $(context).find(expr)
+			} else {
+				return this.constructor( context ).find( selector );
+			}
+
+		// HANDLE: $(DOMElement)
+		} else if ( selector.nodeType ) {
+			this[ 0 ] = selector;
+			this.length = 1;
+			return this;
+
+		// HANDLE: $(function)
+		// Shortcut for document ready
+		} else if ( jQuery.isFunction( selector ) ) {
+			return root.ready !== undefined ?
+				root.ready( selector ) :
+
+				// Execute immediately if ready is not present
+				selector( jQuery );
+		}
+
+		return jQuery.makeArray( selector, this );
+	};
+
+        // Give the init function the jQuery prototype for later instantiation
+        init.prototype = jQuery.fn;
+
+    
+    </script>
+
+</body>
+
+</html>

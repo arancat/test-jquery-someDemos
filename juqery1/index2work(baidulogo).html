@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>work2：百度登录弹窗（动态生成）</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        a {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .wrapper {
+            display: none;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            margin-left: -195px;
+            width: 390px;
+            background: #fff;
+            border: 1px solid #cccccc;
+            overflow: hidden;
+        }
+        .wrapper .titleCont {
+            background: #eee;
+            padding: 10px 0;
+        }
+        .wrapper .titleCont div{
+            display: inline-block;
+        }
+        .wrapper .titleCont #close{
+            float: right; 
+            width: 30px;
+        }
+        .wrapper .main .content{
+            margin: 15px;
+        }
+        .wrapper .main .content input{
+            width: 100%;
+            padding: 10px 0;
+            margin-top: 15px;
+        }
+        .wrapper .main .content button{
+            width: 100%;
+            background: deepskyblue;
+            color: #fff;
+            margin-top: 15px;
+            height: 50px;
+        }
+ 
+    </style>
+</head>
+<body>
+    <a href="#">登录</a>
+     <!-- <div class="wrapper">
+         <div class="titleCont">
+             <div>登录百度账号</div>
+             <button type="" id="close">X</button>
+         </div>
+         <div class="main">
+             <div class="content">
+                 <input type="text" name="user" placeholder="手机/邮箱/用户名">
+                 <input type="password" placeholder="密码">
+                 <button>登录</button>
+             </div>
+         </div> 
+     </div> -->
+
+     <script src="./jquery/jquery.js"></script>
+     <script>
+         var flag = true;
+         $('a').on('click', function () {
+             if(flag) {
+                 flag = false;
+                 var str = '<div class="wrapper">\
+                            <div class="titleCont">\
+                                <div>登录百度账号</div>\
+                                <button type="" id="close">X</button>\
+                            </div>\
+                            <div class="main">\
+                                <div class="content">\
+                                    <input type="text" name="user" placeholder="手机/邮箱/用户名">\
+                                    <input type="password" placeholder="密码">\
+                                    <button>登录</button>\
+                                </div>\
+                            </div> \
+                        </div>';
+                $('body').append($(str));
+             } 
+
+            $('.wrapper').css('display', 'block'); 
+            $('#close').one('click',  function() {
+                $('.wrapper').css('display', 'none');
+            })
+         })
+     
+     
+     
+     
+     
+     
+     </script>
+</body>
+</html>

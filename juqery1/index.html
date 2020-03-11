@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        li {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #888;
+            list-style: none;
+            /* 取掉li的小圆点 */
+        }
+    
+        .active {
+            background: pink;
+        }
+    
+    </style>
+</head>
+<body>
+    <!-- 示例1 -->
+    <!-- <div>1</div>
+    <div>2</div> -->
+
+
+    <!-- 示例2 -->
+    <!-- <div id="demo">
+        <p>1</p>
+    </div>
+    <div class="demo"></div>
+    <p>2</p> -->
+
+
+    <!-- 示例3 -->
+    <!-- <select name="" id="">
+        <option value="">1</option>
+        <option value="">2</option>
+        <option value="">3</option>
+        <option value="">4</option>
+    </select>
+    <ul>
+        <input type="checkbox" checked>
+        <!-选中checked是默认选框中已选中(√) -->
+        <!-- checked="checked"——像这种属性名等于属性值的可以只写属性名来省略 -->
+        <!-- <li>1</li>
+        <li>2</li>
+        <li id="demo">3</li>
+        <li>4</li>
+        <li style="width: 100px">5
+            <p>pp</p>
+        </li>
+    </ul> --> 
+
+    <!-- 示例4 -->
+    <ul>
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+
+    <script src="./jquery/jquery.js"></script>
+    <script>
+
+
+        //示例1
+        // var oDiv = document.getElementsByTagName('div');
+
+        // for(var i = 0; i < oDiv.length; i++) {
+        //     oDiv[i].style.width = '100px';
+        //     oDiv[i].style.height = '100px';
+        //     oDiv[i].style.background = 'red';
+        // }
+
+        // $('div').css({width: '100px', height: '100px', background: 'red'});
+        
+
+            // sizzle查找jQuery最快的方式
+ 
+        //zepto移动端的，还在基础上添加了一些touch事件
+
+    
+
+        //示例2——jquery执行期上下文的用法(第二个是他的执行期上下文)
+        // $('p', '#demo').css({color: 'red'});
+        
+
+
+        //示例3—— jquery的特殊用法
+        //ul下直接子元素——第一个first  的css设置
+        // $('ul>li:first').css('color', 'red');
+
+        //ul下直接子元素——第一个last  的css设置
+        // $('ul>li:last').css('color', 'red');
+
+        //ul下直接子元素——第几个选择，从0开始  的css设置
+        // $('ul>li:eq(2)').css('color', 'red');
+
+        //odd and  even索引是奇偶
+        // $('ul>li:even').css('color', 'red');
+        // $('ul>li:odd').css('color', 'blue');
+
+        //筛选 filter()  &&  not()
+        // $('li').filter('.demo').css('color', 'pink');
+        //使用函数加filter
+        // $('li').filter(function (index) {
+        //     return index%3 == 0;//返回的是  return  true
+        // }).css('color', 'pink');
+        // //反其道用filter——not()函数
+        // $('li').not(function (index) {
+        //     return index%3 == 0;
+        // }).css('color', 'yellow');
+
+        //查找携带某元素的整体 has()函数,主体是jQuery$（）
+        // $('li').has('p').css('color', 'pink');
+
+        //查找有某条件的某元素  find()函数，主题是find（）
+        // $('li').find('p').css('color', 'pink');
+
+        //查找某位置元素eq()两种写法
+        // $('li:eq(1)').css('color', 'pink');
+        // $('li').eq(2).css({color: 'pink'});
+
+        //is()方法  ——判断是不是 ——true or false
+        // console.log($('li').eq(2).is('.demo'));
+
+        //函数式添加HTML——将第一个元素的HTML内容改变成  123——jquery当中允许链式操作，这就是链式操作
+        // $('li').eq(0).css('color', 'red').html('123');
+        
+        //css方法的参数传递  ——链接多个css或者传入对象
+        // $('li').css('width', '100px').css('height', '10px').css('background','blue');
+        // $('li').css({width: '100px', height: 10, background: 'red'});
+        //html方法&& text方法的参数传递
+        // $('li').text('<span>span</span>');
+        // $('li').html('<span>span</span>');
+        // console.log($('li:last').html());//取HTML
+        // console.log($('li:last').text());//取文本text
+
+        //*******什么都不写就是取值，写了就是赋值，能够链式操作的原因也是返回的是对象
+        
+        //属性添加，有的原生的属性（特性）可以选中添加；而没有的原生属性(属性)则无法添加
+        // var oLi = document.getElementById('demo');
+        // oLi.className = 'dg';//因为有className原生特性，所以能添加到HTML中
+        // oLi.ds = 'dxb';//无法添加ds属性进入HTML，所以↓要用setAttribute方法来设置
+        // oLi.setAttribute('ds', 'dxb');
+        // //设置特性和属性的另一种方法
+        // $('#demo').prop('class', 'aa');//给demo设置了aa 的特性className
+        // $('#demo').attr('aran', 'aran');//设置了aran的属性，值为aran
+        // console.log($('#demo').attr('aran'));//不写东西来赋值的话就到代表取值
+
+
+
+        //input操作（此时设置了checked）——prop选中特性可以**实时返回***某特性的状态
+        // $('input').attr('checked');——返回的是checked——只关心特性原来的设置
+        // $('input').prop('checked');——选中的时候返回的是——true
+        // $('input').prop('checked');——未选中的时候返回的是——false
+        //input操作（此时未设置checked）——prop选中特性可以实时返回某特性的状态
+        // $('input').attr('checked');——返回的是undefined——特性未设置，所以没有
+        // $('input').prop('checked');——此时状态是——false，因为没有这个
+
+        //和input操作类似的多选select ——option——具体的见文档图片
+
+
+        //查找上一个或者下一个兄弟节点
+        // $('li:eq(2)').prev().css('color', 'pink');
+        // $('li:eq(2)').next().css('color', 'pink');
+        //返回当前元素的索引值
+
+
+
+
+
+
+
+
+        //示例4——选中变色且返回索引（轮播图常用）
+        //普通实现——无默认值
+        // $('li').click(function () {
+        //     $('li').css('background', '#888');
+        //     $(this).css('background-color', 'pink');
+        //     //this是原生dom要传入$()中才能从原生dom变成一个jQuery对象
+        //     console.log($(this).index());
+        // })
+
+        //有默认值，设置active默认样式——先清除active再重选
+        $('li').click(function () {
+            //先清除
+            // $('li').removeClass('active');
+            //但是这个循环遍历了一遍寻找active属性的元素，很麻烦——可以改进↓
+            $('.active').removeClass('active');
+            //注意  如果是如下写法，将清除选中的class上面所有的class样式
+            //可能本来有class="active aa bbb"等多个样式存在
+            $('.active').removeClass();
+            //再选中
+            $(this).addClass('active');
+        })
+
+
+
+    </script>
+</body>
+</html> 

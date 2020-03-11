@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>4深入jQuery高级应用（工具方法）</title>
+</head>
+<body>
+    <div>div</div>
+    <script src="./jquery/jquery.js"></script>
+    <script>
+        //两种方法↓
+
+        // 1------------$('div').html();//实例方法↓定义在对象的原型上
+        // {0:div, length: 1,_proto_:}.html
+
+
+        //2-------------工具方法 $.xx()方法——定义在函数（jquery）上面的都是工具方法
+        // var arr = [1,2,3];
+        // $.type(arr);
+        // function jQuery() {
+
+        // }
+        // jQuery.type = function () {
+        //     console.log(999);
+        // }
+        // jQuery.aa = 123;
+        // console.log(jQuery.aa);
+        // jQuery.type();
+        
+    
+    //原生js判断类型的三种方法-----ppt有解释（原生js）
+        //广泛精准的判断↓
+        // var arr = {};
+        // console.log(Object.prototype.toString.call(arr));
+        //jQuery——$.type()
+
+
+        //消除字符串两边的空格trim()——原生方法也是用正则来匹配的
+        // var str = '               gs           ';
+        // console.log($.trim(str)); 
+        // //明显展示
+        // console.log('|' + $.trim(str) + '|');
+
+        //改变this的指针方向——proxy 其实遵循 ——柯里化思想
+        // function show() {
+        //     console.log(this);
+        // }
+        // show();//---->指向Window
+
+        //proxy返回的是一个对象
+        // function show() {
+        //     console.log(this);
+        // }
+        // var obj = {
+        //     name: 'aimee'
+        // }
+        // var fn = $.proxy(show, obj);
+        // //或  不用接收，直接
+        // $.proxy(show, obj)();
+        // fn();
+
+        //改编例子
+        // function show(a, b) {
+        //     console.log(this);
+        //     console.log(a + ' ' + b);
+        // }
+        // var obj = {
+        //     name: 'aimee'
+        // }
+        // var fn = $.proxy(show, obj);
+        // //或  不用接收，直接
+        // $.proxy(show, obj)(1, 2);
+        // $.proxy(show, obj, 1 ,2)();
+        // $.proxy(show, obj, 1)(2);
+        // //提供这么多存变量的方法是因为——跟随"柯里化思想"
+        // //把多个函数传成一个实现复用
+         
+
+
+        //noConflict()防止冲突——如何移交权限——直接赋值的话，本身还是代表含义，所以要用方法
+        //冲突  或者多版本冲突
+        // var wquery = $.noConflict();//(√)
+        // // var wquery = $;//(X)
+        // console.log(wquery('div'));
+
+        //parseJSON()字符转换成json要求非常严格（外部是单引号，内部属性是双引号，不需要回车符）
+        // var obj = {
+        //     "aa": 123,
+        //     "bb": "dg"
+        // }
+        // var str = JSON.stringify(obj);
+        // console.log($.parseJSON(str));
+
+        //makeArray——类数组变数组
+        // var obj = {
+        //     "aa": 123,
+        //     "bb": "dg"
+        // }
+        // console.log($.makeArray(obj));
+
+
+
+
+
+
+
+        //jQuery高级工具方法
+        // $.fn  = $.prototype----fn是prototype的简写
+        //$.extend扩展新的工具方法 ； $.fn.extend*()————but实例方法
+        //拓展一个aa的工具方法
+    //     $.extend({
+    //         aa: function () {
+    //             console.log(888);
+    //         }
+    //     })
+    //     $.aa(); 
+    //     $.extend({
+    //         leftTrim: function (str) {
+    //             var reg = /^\s+/g;
+    //             return  str.replace(reg, '');
+    //         }
+    //     })
+    //     console.log($.leftTrim('        dg'));
+    // //实例方法
+    //     $.fn.extend({
+    //         leftTrim: function (str) {
+    //             var reg = /^\s+/g;
+    //             return  str.replace(reg, '');
+    //         }
+    //     })
+    //     console.log($('div').leftTrim('        dg'));
+
+
+    //extend还可以用来合并——其实都是合并的意思
+    // var obj1 = {
+    //     person1: {
+    //         name: 'dg',
+    //         age: 55
+    //     }, //对象：引用值
+    //     number:1 //原始值
+    // }
+     
+    // var obj2 = {
+    //     person2: {
+    //         name: 'cg',
+    //         age: 30
+    //     },
+    //     number:2
+    // }
+    // $.extend(obj1, obj2);//不相同的扩展，相同的覆盖
+    // console.log(obj1);
+    // //判断是浅拷贝还是深拷贝（拿的是索引值，是指针）
+    // obj2.person2.age = 31;
+    // console.log(obj1);//----->结果为31  说明是浅拷贝
+    // //如何深拷贝？---参数 true
+    // $.extend(true, obj1, obj2);
+
+
+
+
+    //Callbacks（）管理回调函数队列
+    // function fn1 () {
+    //     console.log('fn1');
+    // }
+    // function fn2 () {
+    //     console.log('fn2');
+    // }
+    // function fn3 () {
+    //     console.log('fn3');
+    // }
+    // var cb = $.Callbacks();
+    // //可以采用'once’来限制fire的执行
+    // var cb = $.Callbacks('once');
+    // //，不论fire多少次;unique 只执行第一个一次fn
+    // var cb = $.Callbacks('unique');
+    // cb.add(fn1, fn2, fn3);
+    // cb.fire();//执行
+    // cb.fire();
+    // //触发了之后再添加也能触发新加入的
+    // var cb = $.Callbacks('memory');
+    // cb.fire();
+    // cb.add(fn3);//此时fn3也能触发
+    // //stopOnFalse 属性 停止在return false这里
+    // function fn1 () {
+    //     console.log('fn1');
+    // }
+    // function fn2 () {
+    //     console.log('fn2');
+    //     return false;
+    // }
+    // function fn3 () {
+    //     console.log('fn3');
+    // }
+    // var cb = $.Callbacks('stopOnFalse');
+    // cb.add(fn1, fn2, fn3)
+    // cb.fire();//----->只有fn1
+    //还可以混合搭配--- ↓
+    // $.Callbacks('memory once');
+
+
+
+
+    //Deferred()延迟对象，相当于有状态的callbacks——三个状态：成功 失败 进行中
+    //done--resolve ;fail    reject ;progress  notify
+    // var dtd = $.Deferred();
+    // function aa() {
+    //     dtd.resolve();//执行成功的状态
+    // }
+    // aa();
+    
+    //根据其状态来分别执行下面对应的那一个↓
+
+    // dtd
+    // .done(function () {
+    //     console.log('ok');
+    // })
+    // .fail(function () {
+    //     console.log('error');
+    // })
+    // .progress(function () {
+    //     console.log('doing');
+    // })
+
+
+    //  用定时器模拟网络请求
+    // function aa() {
+    //     var dtd = $.Deferred();//这样防止外界f=dtd函数干扰状态
+    //     setInterval(function () {dtd.notify()}, 500);
+    //     //其实变成失败了就不会再变了，因为状态失败了就不会有后续内容了，所以resolve不会有执行
+    //     setInterval(function () {dtd.reject()}, 1000);
+    //     setInterval(function () {dtd.resolve(), 2000});
+    //     return dtd.promise();//只读——不干扰
+    // }
+    // var cb = aa();
+    // cb
+    // .done(function () { 
+    //     console.log('ok');
+    // })
+    // .fail(function () {
+    //     console.log('error');
+    // })
+    // .progress(function () {
+    //     console.log('doing');
+    // })
+
+
+
+    //when——同时成功才成功
+    function aa() {
+        var dtd = $.Deferred();
+        dtd.resolve();
+        return dtd.promise();
+    }
+    function bb() {
+        var dtd = $.Deferred();
+        dtd.resolve();//改成reject 则集体失败
+        return dtd.promise();
+    }
+    var cb = aa();
+    var cb2 = bb();
+    $.when(cb, cb2)//只有当都成功执行ok。不然reject-----error
+    .done(function () { 
+        console.log('ok');
+    })
+    .fail(function () {
+        console.log('error');
+    })
+    .progress(function () {
+        console.log('doing');
+    })
+
+    </script>
+</body>
+</html>

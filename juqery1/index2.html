@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2.2细说jQuery应用，搞定百度登录组件</title>
+    <style>
+
+        /* 示例1 */
+        /* li {
+            width: 100px;
+            height: 30px;
+            border-radius: 10px;
+            background: #ccc;
+            list-style: none;
+            /* 取掉其他的比如空心实心等默认样式 */
+            /* margin-bottom: 10px;
+        }
+        .active {
+            background: pink;
+        }
+        ul {
+            border: 1px solid #000;
+        } */ 
+
+
+
+
+        /* 实例2 */
+
+        /* body {
+            height: 2000px;
+        }
+
+
+        .wrapper {
+            position: absolute;
+            top: 100px; 
+            width: 300px;
+            height: 300px;
+            background: #ccc;
+
+        }
+        .item1, .item2 {
+            width: 100px;
+            height: 100px;
+        }
+        .item1 {
+            background: red;
+        }
+        .item2 {
+            background: green;
+        } */
+
+
+
+        /* 示例3 */
+        /* body {
+            width: 1000px;
+            height: 1000px;
+        }
+         div {
+             width: 100px;
+             height: 100px;
+             padding: 10px;
+             border: 10px solid #000;
+             margin: 10px;
+             background: red;
+         } */
+
+         /* 示例4 */
+         * {
+             padding: 0;
+             margin: 0;
+         }
+         .wrapper {
+             position: relative;
+             top: 100px;
+         }
+         .item {
+             position: absolute;
+             top: 100px;
+             left: 100px;
+         }
+
+    </style>
+</head>
+<body>
+    <!-- 示例1 -->
+    <!-- <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+    <p>pp</p> -->
+
+    <!-- 示例2 -->
+    <!-- <div class="wrapper">
+        <div class="item1 item">div1
+            <a href="#">aaaa</a>
+        </div>
+        <div class="item2 item">div2</div>
+    </div>
+    <p>pp</p> -->
+
+
+    <!-- 示例3 -->
+    <!-- <div></div> -->
+    <!-- <input type="" name="" > -->
+    <!-- <p>ppp
+        <span>span</span>
+    </p> -->
+<!-- 
+    <p>ppp
+            <a href="https://www.baidu.com">百度一下邓哥</a>
+        </p> -->
+
+        <!-- 示例4 -->
+        <div class="wrapper">wrapper
+            <div class="item">div</div>
+        </div>
+
+
+    <script src="./jquery/jquery.js"></script>
+    <script>
+
+        //示例1
+
+        //改变class（根据条件添加）
+        // $('li').addClass(function (index) {
+        //     if(index % 3 == 0) {
+        //         return 'aaa';
+        //     }
+        // });
+    
+
+
+        //toggleClass()用法，设置class特性
+        //全部设置class
+        // $('li').toggleClass('aaa');
+        // //有的话会帮你删除掉
+        // $('li').eq(0).toggleClass('aaa');
+        // //——一般都在点击事件上使用
+        // $('li:eq(0)').click(function () {
+        //     $(this).toggleClass('active');
+        // })
+
+
+
+        //insertBefore()  &  before() 的用法 和区别（after同理）
+        //将5插入到1前面的写法(谁插入到谁前面 / 谁在谁前面)
+        // $('li').eq(4).insertBefore($('li:eq(0)'));
+        // $('li:eq(0)').before($('li:eq(4)'));
+        //区别↓——选取dom方便链式调用
+        //return出来的是eq(4)
+        // $('li').eq(4).insertBefore($('li:eq(0)')).css('color', 'red');
+        //return出来的是eq(0)
+        // $('li:eq(0)').before($('li:eq(4)')).css('color', 'green');
+
+
+        //append()  &  appendTo() 
+        //只有p变红了
+        // $('p').appendTo($('ul')).css('color', 'red');
+        //改变后的ul全变变红了
+        // $('ul').append($('p')).css('color', 'deeppink');
+        //相像的原生的方法↓
+        // document.body.appendChild('oDiv');
+        //插入到所有子元素的第一位（相似）
+        // $('p').prependTo($('ul')).css('color', 'orange');
+        // $('ul').prepend($('p')).css('color', 'orange');
+
+
+        
+
+
+
+        //示例2
+        //remove()  &  detach（）删除方法
+        //remove方法删除了之后返回本身 ，身上的事件已经不存在了（所以再点击就不能删除了）  
+        //detach方法删除之后还要返回本身带有的事件
+        // $('.item1').click(function () {
+        //     item1  = $(this).remove();
+        // })
+        // $('.item2').click(function () {
+        //     item2 = $(this).detach();
+        // })
+        // $('p').click(function () {
+        //     $('.wrapper').append(item1).append(item2);
+        // })
+
+
+        //on()事件 和off()事件
+        //鼠标按下——被删除
+        // $('item1').mousedown(function () {
+        //     item1 = $(this).remove();
+        // })
+        // //类似于↓(原生的绑定)
+        // oDiv.onclick = function() {
+
+        // }
+        // //事件监听方式↓
+        // oDiv.addEventListener('click', function() {
+
+        // })
+        //on（）事件——不同的是 可以传参数：对象，字符串，数组↓
+        // $('.item1').on('click', {name:'dg'}, function (e) {
+        //     console.log(e.data)
+        //     console.log($(this).html());
+        // })
+        // $('.item1').on('click', [1,2,3], function (e) {
+        //     console.log(e.data)
+        //     console.log($(this).html());
+        // })
+        //但是字符串不同，字符串是第三个参数，第二个参数是事件源
+        // $('.item1').on('click', 'a', 'a', function (e) {
+        //     console.log(e.data)
+        //     console.log($(this).html());
+        // })
+
+        //创建绑定也享有事件↓
+        // $('.wrapper').on('click', '.item', function() {
+        //     console.log($(this).html());
+        // })
+        // $('<div class="item">div3</div>').appendTo('.wrapper');
+        // //而绑定到item上就不会共享了——应该绑定到整体的父级
+        // $('.item').on('click',  function() {
+        //     console.log($(this).html());
+        // })
+        // $('<div class="item">div3</div>').appendTo('.wrapper');
+
+        //off解除绑定
+        // $('.item').off('click'); 
+        //解绑传参限制范围1
+        // $('wrapper').on('click', 'item1', function (e) {
+        //     console.log('item1');
+        // })
+        // $('wrapper').on('click', 'item2', function (e) {
+        //     console.log('item2');
+        // })
+        //传入参数，解绑更精准，只解绑其中的一个
+        // $('.wrapper').off('click', '.item1');
+        //解绑传参限制范围2
+        // function a() {
+        //     console.log('a');
+        // }
+        // function b() {
+        //     console.log('b');
+        // }
+        // $('.wrapper').on('click', '.item1', a);
+        // $('.wrapper').on('click', '.item1', b);
+        // $('.wrapper').off('click', '.item1', a);
+
+
+        //one（）方法，只触发一次(就不用解绑了啊 )
+        // $('.wrapper').one('click', '.item1', a);
+
+        //scroll（）事件——滚轮事件(fix的定位不精确，但是scrollTop好，但兼容性不好)
+        // $(window).scroll(function() {
+        //     console.log($(window).scrollTop());
+        // } )
+        //利用其实现ie兼容——一直定位在一个位置
+        // $(window).scroll(function() {
+        //     $('.wrapper').css({top: $(window).scrollTop() + 100});
+        // } )
+
+
+
+
+
+        //示例3
+        //innerWidth=content+padding
+        //outerWidth = innerWidth + border
+        //width = content
+        //outerWidth参数为true时，求出的宽度带有margin
+
+
+        //*********一般用得少的功能和标签基本都是动态插入的**********
+ 
+
+        //如何创建标签(单标签可创建<div>√    但是伪标签不可创建</div>x)
+        // $('<div>').appendTo('body');
+
+
+        //事件对象
+        // $('body').click(function (e) {
+        //     console.log(e.pageY);//相对文档（整个浏览器窗口）
+        //     console.log(e.clientY);//相对适口（屏幕）而言的距离
+        //     console.log(e.screenY);
+        // })
+
+        //which  &  button(鼠标的)
+        // $('input').keydown(function (e) {
+        //     console.log(e.which);
+        // })
+        //如何分别判断鼠标右键呢？和左键区分  ;contextmenu菜单事件
+        // $('input').on('mousedown contextmenu', function (e) {
+            //取掉默认事件
+        //     e.preventDefault();
+        //     console.log(e.which);// 0 3
+        //     console.log(e.button);//left 0   1  right 2 
+        // })
+
+        //事件冒泡
+        //点击span会把事件冒泡到P标签上
+            // $('span').click(function (e) {
+            //     e.stopPropagation();//取消冒泡
+            //     console.log('span');
+            // })
+            // $('p').click(function () {
+            //     console.log('p');
+            // })
+
+        //即取消冒泡又取消默认事件
+        // $('a').click(function (e) {
+        //     console.log('span');
+        //     return false;
+        //     //直接return false
+        // })
+        // $('p').click(function () {
+        //     console.log('p');
+        // })
+
+
+
+
+        // 示例4  offset()  &  position()
+        //offset相对于整个文档  position相对于有定位的父级
+        $('.item').offset();//-------->{top: 200,left: 100}
+        $('.item').position();//------>{top: 100,left: 100}
+
+    </script>
+</body>
+</html> 

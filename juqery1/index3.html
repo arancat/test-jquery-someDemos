@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3.详解jQuery事件，动画与效果</title>
+    <style>
+        #demo {
+            /* display: none； */
+            position: absolute;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+        #ds {
+            position: absolute;
+            top: 0;
+            left: 300px;
+            width: 100px;
+            height: 100px;
+            background: pink;
+        }
+        #es {
+            position: absolute;
+            top: 300px;
+            left: 300px;
+            background: orange;
+            width:100px;
+            height: 100px;
+        }
+    
+    
+    </style>
+</head>
+<body>
+    <!-- 示例1 -->
+    <!-- <ul>
+        <div class="demo">
+            <li>
+                <div class="item">
+                    <p>
+                        <span>span</span>
+                    </p>
+                </div>
+            </li>
+        </div>
+    </ul> -->
+
+
+    <!-- 示例2 -->
+    <!-- <input type="text" name="" id=""> -->
+<!-- 
+    <ul>
+        <li>1
+            <span>span</span>
+        </li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+    <p>55555555</p>
+        <li>6</li> -->
+
+
+
+    <!-- 示例3 -->
+    <!-- <form action="">
+        <input type="text" name="username">
+        <input type="text" name="age">
+        <input type="submit" >
+    </form> -->
+
+
+
+    <!-- 示例4 -->
+
+    <div id="ds">ds</div>
+    <div id="es">es</div>
+    <div id="demo">dg</div>
+
+
+    <script src="./jquery/jquery.js"></script>
+    <script>
+
+        //示例1查找
+
+        //父级的返回 
+        //传参是为了筛选—— 是的话返回 不是的话是空
+        //直接父级
+        // console.log($('span').parent('xxx'));//用于返回是否直接父元素是xxx
+
+        //最近的父级（有定位的）
+        // console.log($('span').offsetParent());//---HTML
+        // //找到所有符合的——parents（）方法
+        // console.log($('span').parents('div'));
+
+        //查找最近的某一种——closest()
+        // console.log($('span').closest('div'));
+
+
+
+
+
+        //示例2——
+        //显示value——val方法  失去焦点的事件
+        // $('input').blur(function () {
+        //     console.log($(this).val());//jQuery当中的value方法是val()
+        // })
+
+        //遍历 第一个是index的原因，因为更经常用到index，所以就作为第一个参数了 
+        // $('li').each(function (index, ele) {
+        //     console.log(index);
+        //     console.log(ele);        //     console.log(this);
+        // })
+    
+        //end()回退方法——因为前面已经找出来了所有的对象，回退就是取的当前对象的prevObject
+        // $('li').eq(0).css('color', 'yellow').end().eq(4).css('color', 'pink');
+        //到头的prevObject是 document
+        //所有的兄弟节点——sibings()
+        // $('li:eq(2)').siblings().css('color', 'deepskyblue');
+        //上面的兄弟节点——prevAll()  ；下面的兄弟节点——nextAll（）
+        // $('li:eq(2)').prevAll().css('color', 'deepskyblue');
+        // $('li:eq(2)').nextAll().css('color', 'pink');
+        //从当前的到其他——prevUntil（）方法——取中间的，掐头去尾
+        // $('li:eq(2)').prevUntil($('li:eq(0)')).css('color', 'red');
+    
+        //clone克隆（事件也被克隆）
+        // $('li:eq(0)').click(function () {
+        //     console.log(888);
+        // })
+        // var a = $('li:eq(0)').clone(true);
+        // //传参数为true————事件也被克隆
+        // $('ul').append(a);
+
+
+
+
+
+        //wrap (包裹)方法↓
+
+        //wrap
+        // $('li:eq(0)').wrap('<div>');//不存在的，新增的
+        // $('li:eq(0)').wrap($('p'));//已存在的
+        // //wrapinner()——循环包裹
+        // $('li:eq(0)').wrapInner('<p>');
+        // $('li').wrapInner(function (findex) {
+        //     if(index == 0) {
+        //         return '<div>'
+        //     }else if(index == 1) {
+        //         return '<p>'
+        //     }else {
+        //         return 'span'
+        //     }
+        // })
+
+        //wrapAll _包裹选中的所有元素，并且破坏结构——文档有具体解释截图
+        // $('li').wrapAll('<div>');
+        // //unwrap()解除包裹——但结构化的标签不能解除譬如body head...
+        // $('li:eq(0)').unwrap().unwrap();
+
+
+        //集中操作
+        //add()
+        // $('li').eq(0).css({color: 'red', width: 100, height: 100}).end().eq(4).css({color: 'pink'});
+        // $('li').eq(0).add('li').eq(4).add('li').eq(2).css({width: '100px', height: '100px', background: 'orange'});
+        //slice()截取字符串
+        // $('li').slice(0, 2).css('color', 'red');//从0选到2，闭区间到开区间
+        //empty()——清空
+        // $('ul').empty().html(123);//法1
+        // $('ul').html('');//法2——直接添加空' '
+
+
+
+
+
+
+
+
+
+
+        //示例3
+        //消除默认事件
+        // $('input:eq(2)').click(function (e) {
+        //     e.preventDefault();
+        //     console.log($('form').serialize());//串联拼接表单数据
+        //     //拼接串联数据成数组
+        //     console.log($('form').serializeArray());
+        // }) 
+
+
+        
+        //示例4
+        //animate动画——原生dom
+        // var oDiv = document.getElementById('demo');
+        // var timer = setInterval(function () {
+        //     if(oDiv.offsetLeft >= 300) {
+        //         oDiv.style.left = '300px';
+        //         clearInterval(timer); 
+        //     }else {
+        //         oDiv.style.left = oDiv.offsetLeft + 10 + 'px';
+        //     }
+        // }, 100)
+
+        //animate动画——jQuery——有一个速率参数（第三个参数）
+        //swing先慢后快再慢（默认）  ；  linear匀速
+        //有一个速度插件jquery.easing.js
+        //第四个参数——一个回调函数
+        // $('#demo').animate({left: 300, height: 300, width: 300}, 1000, 'swing', function() {
+        //     console.log("game over");//执行完了打印
+        // });
+
+        // $('#demo').animate({left: 300}, 1000, 'swing', function() {
+        //     $(this).animate({top: 300}, 1000, 'linear');
+        // });
+
+        // $(document).click(function() {
+        //     $('#demo').stop();//停止当前运动
+        // })
+
+        //只停止当前额运动，继续之后的运动↓
+        // $('#demo').animate({left: 300}, 1000, 'swing').animate({left: 300, top: 300}, 1000, 'linear');
+
+        // $(document).click(function() {
+        //     //第一个是否停止后续所有运动  false不停止，继续 true 停止所有
+        //     //（第二个是否立即到达目标点  false 不到达 true到达
+        //     $('#demo').stop();//停止当前运动，继续后续运动=====stop-false，false
+        //     $('#demo').stop(true);//停止所有运动
+        //     $('#demo').stop(true,true);//停止所有运动，并停在当前目标点
+        //     $('#demo').stop(false, true);//停止当前运动并且停在当前的目标点，紧接着从当前目标点
+        //     //做下一个运动
+        // })
+
+
+        //delay（）方法——延迟 ——延迟2秒钟
+        // $('#demo').animate({left: 300}, 1000, 'swing').delay(2000).animate({left: 300, top: 300}, 1000, 'linear');
+
+        //slideToggle（speed, callback）滑动切换<--->slideUp（speed, callback）<-->slideDown
+        // $('#demo').slideUp();//向上滑动隐藏
+        // $('#demo').slideDown();//向下滑动出现（对应css的#demo： display： none）
+        // $('#ds').click(function () {
+        //     $('#demo').slideToggle();//点击一次出现，点击一次隐藏，可循环
+        // })
+        //toggleCall('active') 类似↑
+
+        
+        //fadeIn   fadeOut  fadeToggle 淡入淡出
+        // $('#ds').click(function () {
+        //     $('#demo').fadeToggle(4000);//点击一次出现，点击一次隐藏，可循环
+        // })
+
+
+
+
+        //trigger触发
+        $('#demo').on('eat', function (event, a) {
+            $(this).animate({width: $(this).width() + a})
+        })
+        // $('#demo').trigger('eat');//触发绑定
+
+        var timer = setInterval(function () {
+            if($('#demo').width() > 300){
+                $('#demo').remove();
+                clearInterval(timer);
+            }else {
+                $('#demo').trigger('eat', [100]);
+            }
+        }, 500)
+
+
+
+
+
+    </script>
+</body>
+</html> 
